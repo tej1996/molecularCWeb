@@ -70,3 +70,62 @@ $(function()
             });
         });
     });
+$(function()
+    {
+        $('#newfs-form').submit(function(event){
+	    event.preventDefault();
+	    var drivename=$("#drive-name").val();
+	    var drivesize=$("#drive-size").val();
+		alert(drivename);
+            $.ajax({
+                url: "/cgi-bin/new_storage_fixed.py",
+                type: "post",
+                datatype:"json",
+                data: {'drivename':drivename,'drivesize':drivesize},
+		beforeSend: function(){
+			$('#btn-create-drv').attr('disabled',true);
+			$("#btn-create-drv").attr('value', 'Creating your drive...');		
+		},
+                success: function(response){
+		    if(response.status==1){
+			console.log("Login Success!");
+		    }
+                },
+		complete: function() {
+        		$('#btn-create-drv').attr('disabled',false);
+			$("#btn-create-drv").attr('value', 'Create your Drive');	
+    		}
+            });
+        });
+    });
+$(function()
+    {
+        $('#create-atom-form').submit(function(event){
+	    event.preventDefault();
+	    var os=$("input:radio[name=os]:checked").val();
+	    var grp=$("input:radio[name=grp]:checked").val();
+ 	    var atomname=$("#atomname").val();
+            $.ajax({
+                url: "/cgi-bin/iaas/create-atom.py",
+                type: "get",
+                datatype:"json",
+                data: {'os':os,'grp':grp,'atomname':atomname},
+		beforeSend: function(){
+			$('#submit-atom').attr('disabled',true);
+			$("#submit-atom").attr('value', 'Creating...');		
+		},
+                success: function(response){
+		    if(response.status==0){		
+			console.log("Error");
+			}
+		    else if(response.status==2){
+			alert("Server Error");			
+			}
+                },
+		complete: function() {
+        		$('#submit-atom').attr('disabled',false);
+			$("#submit-atom").attr('value', 'Submit');	
+    		}
+            });
+        });
+    });
