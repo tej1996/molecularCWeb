@@ -70,33 +70,47 @@
   <div id="intro">
 	<div class="row" id="content">
 		<h3>We have various options for you, please choose accordingly!</h3>
+		<!--<form action="cgi-bin/saas/saas.py" id="download-form" method="get">-->
 		<section class="section_0">
 			<div class="col-md-2 col-md-offset-1">
 			<div class="circle saas">
-			  <a href="saas/vlc.py" download><h3>VLC</h3></a>
+			  <input type="hidden" value="vlc" id="opt1"/>
+			  <a href="/saas/vlc.tar" download><h3>VLC</h3></a>
 			</div>
 			</div>
 			<div class="col-md-2">
 			<div class="circle saas">
-			  <a href="saas/firefox.py" download><h3>Firefox</h3></a>
+			  <input type="hidden" value="firefox" id="opt2"/>
+	<!--onclick="document.getElementById('opt2').setAttribute('name', 'download');document.getElementById('download-form').submit();"-->
+			  <a href="/saas/firefox.tar" download><h3>Firefox</h3></a>
 			</div>
 			</div>
 			<div class="col-md-2">
 			<div class="circle saas">
-			  <a href="saas/calculator.py" download><h3>Calculator</h3></a>
+			  <input type="hidden" value="calculator" id="opt3"/>
+			  <a href="/saas/calculator.tar" download><h3>Calculator</h3></a>
 			</div>
 			</div>
 			<div class="col-md-2">
 			<div class="circle saas">
-			  <a href="saas/screenshot.py" download><h3>Screenshot</h3></a>
+			  <input type="hidden" value="screenshot" id="opt4"/>
+			  <a href="/saas/screenshot.tar" download><h3>Screenshot</h3></a>
 			</div>
 			</div>
 			<div class="col-md-2">
 			<div class="circle saas">
-			  <a href="saas/webcam.py" download><h3>Web Camera</h3></a>
+			  <input type="hidden" value="webcam" id="opt5"/>
+			  <a href="/saas/webcam.tar" download><h3>Web Camera</h3></a>
+			</div>
+			</div>
+			<div class="col-md-2">
+			<div class="circle saas">
+			  <input type="hidden" value="openoffice" id="opt6"/>
+			  <a href="/saas/openoffice.tar"  download><h3>Open Office</h3></a>
 			</div>
 			</div>
 		</section>
+		<!--</form>-->
 	</div>
   </div>
  </div>

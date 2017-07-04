@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import dbconnect,cgi,json
+import dbconnect,cgi,json,pwd,os,commands
 
 print "Content-Type: application/json\n\n"
 
@@ -17,16 +17,24 @@ try:
 	dbconnect.cursor.execute("SELECT email,username from users WHERE email=%s || username=%s",(email,username))
 	rows=dbconnect.cursor.fetchall()
     	num_rows=dbconnect.cursor.rowcount
+	
+	try:
+		luser=pwd.getpwnam(username)
+		if luser:
+			result['status'] = 0
+	except:
+		if num_rows==0:
+			#insert user entry into database
+			dbconnect.cursor.execute("INSERT into users(email,username,password) VALUES(%s,%s,%s)",(email,username,password))
+	    		dbconnect.mariadb_connection.commit()
+			dbconnect.mariadb_connection.close()
 
-	if num_rows==0:
-		#insert user entry into database
-		dbconnect.cursor.execute("INSERT into users(email,username,password) VALUES(%s,%s,%s)",(email,username,password))
-    		dbconnect.mariadb_connection.commit()
-		#setting status in json object
-		result['status'] = 1
-	else:
-		result['status'] = 0
-    
+			os.system('sudo adduser '+username)
+			commands.getstatusoutput('echo '+password+'| sudo passwd '+username+ ' --stdin')		
+			#setting status in json object
+			result['status'] = 1
+		else:
+			result['status'] = 0
 except: 
 	result['status'] = 2
 
