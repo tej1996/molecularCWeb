@@ -105,27 +105,37 @@ $(function()
 	    var os=$("input:radio[name=os]:checked").val();
 	    var grp=$("input:radio[name=grp]:checked").val();
  	    var atomname=$("#atomname").val();
+ 	    var username=sessionStorage.getItem("username")
             $.ajax({
                 url: "/cgi-bin/iaas/create-atom.py",
                 type: "get",
                 datatype:"json",
-                data: {'os':os,'grp':grp,'atomname':atomname},
-		beforeSend: function(){
-			$('#submit-atom').attr('disabled',true);
-			$("#submit-atom").attr('value', 'Creating...');		
-		},
-                success: function(response){
-		    if(response.status==0){		
-			console.log("Error");
-			}
-		    else if(response.status==2){
-			alert("Server Error");			
-			}
+                data: {'os':os,'grp':grp,'atomname':atomname,'username':username},
+				beforeSend: function(){
+					$('#submit-atom').attr('disabled',true);
+					$("#submit-atom").attr('value', 'Creating...');
+					$("#tab_d_head").css('display','block');
+				},
+				success: function(response){
+					if(response.status==0){
+					console.log("Error");
+					}
+					else if(response.status==2){
+					alert("Server Error");
+					}else{
+						$(".loader").css('display','none');
+						$('.check-success').css('stroke-dashoffset', 0);
+						console.log(response.status);
+							window.location.href = "iaas_dashboard.html";
+					}
                 },
-		complete: function() {
-        		$('#submit-atom').attr('disabled',false);
-			$("#submit-atom").attr('value', 'Submit');	
-    		}
-            });
-        });
+				complete: function() {
+						$('#submit-atom').attr('disabled',false);
+						$("#submit-atom").attr('value', 'Submit');
+					}
+					});
+				});
     });
+
+
+

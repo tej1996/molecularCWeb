@@ -8,19 +8,11 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css" />
   <script type='text/javascript' src='js/jquery-3.2.1.min.js'></script>	
-  <script>
-	var status = sessionStorage.getItem("status");
-	if (status != 1){
-		window.location="/index.html";
-	}else{
-		var username = sessionStorage.getItem("username");
-	}
-  </script>
   
   <script type='text/javascript' src='js/bootstrap.min.js'></script>
   <script type='text/javascript' src='js/jquery.particleground.js'></script>
   <script type='text/javascript' src='js/particles.js'></script>
-  <script type="text/javascript" src="js/custom.js"></script>
+
 </head>
 
 <body>
@@ -69,10 +61,10 @@
 	<div class="row" id="content">
 		<h3>Create your Atom!</h3>
 			<ul class="nav nav-pills nav-justified thumbnail">
-			  <li class="active"><a href="#tab_a" data-toggle="tab">Choose your OS</a></li>
-			  <li><a href="#tab_b" data-toggle="tab">Choose your Group</a></li>
-			  <li><a href="#tab_c" data-toggle="tab">Enter Atom Name</a></li>
-			  <li><a href="#tab_d" data-toggle="tab">Choose Hard Disk Size</a></li>
+			  <li class="active"><a href="#tab_a" data-toggle="tab">Choose your Image</a></li>
+			  <li><a href="#tab_b" data-toggle="tab">Choose Size</a></li>
+			  <li><a href="#tab_c" data-toggle="tab">Set Atom Name</a></li>
+			  <li><a href="#tab_d" data-toggle="tab" id="tab_d_head" style="display:none">Generating Atom</a></li>
 			</ul>
 			<form id="create-atom-form">
 			<div class="tab-content">
@@ -198,12 +190,20 @@
 				    <input type="text" id="atomname" placeholder="Enter your Atom name">
 				    <a class="btn btn-primary btnPrevious" >Previous</a>
 				    <a class="btn btn-primary btnNext" >Next</a>
-				    <button type="submit" class="btn btn-primary" id="submit-atom">Submit</a>
+				    <button type="submit" class="btn btn-primary btnNext" id="submit-atom">Submit</button>
+				
 				</div>
-				<div class="tab-pane" id="tab_d">
-				    <h4>Pane D</h4>
-			   	    <a class="btn btn-primary btnPrevious" >Previous</a>
-				    <a class="btn btn-primary btnNext" >Submit</a>
+				<div class="tab-pane" id="tab_d" >
+				    <h4>Generating your atom</h4>
+				    <label>
+				    <div class="loader"></div>
+					<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+					<polyline class="check-success" fill="none" stroke="#02a9ea" stroke-width="10" stroke-miterlimit="20" points="15,60 40,80 85,20" />
+					</svg>
+
+				    </label>
+				
+				    <br>
 				</div>
 			</div><!-- tab content -->
 			</form>
@@ -215,8 +215,6 @@
 
 </body>
 <script>
-document.getElementById("welcome-msg").innerHTML = "Welcome, "+username;
-
 $(document).ready(function(){
     $('#logout').click(function(e) {
         e.preventDefault();
