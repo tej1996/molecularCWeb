@@ -1,6 +1,11 @@
 #!/usr/bin/python
 
-import dbconnect,cgi,json,pwd,os,commands
+import cgi
+import commands
+import dbconnect
+import json
+import os
+import pwd
 
 print "Content-Type: application/json\n\n"
 
@@ -14,9 +19,9 @@ try:
 	password=form_register.getvalue('rpassword').lower().strip()
 
 	#checking if username or email exists
-	dbconnect.cursor.execute("SELECT email,username from users WHERE email=%s || username=%s",(email,username))
-	rows=dbconnect.cursor.fetchall()
-    	num_rows=dbconnect.cursor.rowcount
+	dbconnect.cursor.execute("SELECT email,username from users WHERE email=%s || username=%s", (email, username))
+	rows= dbconnect.cursor.fetchall()
+    	num_rows= dbconnect.cursor.rowcount
 	
 	try:
 		luser=pwd.getpwnam(username)
@@ -25,7 +30,7 @@ try:
 	except:
 		if num_rows==0:
 			#insert user entry into database
-			dbconnect.cursor.execute("INSERT into users(email,username,password) VALUES(%s,%s,%s)",(email,username,password))
+			dbconnect.cursor.execute("INSERT into users(email,username,password) VALUES(%s,%s,%s)", (email, username, password))
 	    		dbconnect.mariadb_connection.commit()
 			dbconnect.mariadb_connection.close()
 
