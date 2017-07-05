@@ -30,7 +30,8 @@ try:
 			dbconnect.mariadb_connection.close()
 
 			os.system('sudo adduser '+username)
-			commands.getstatusoutput('echo '+password+'| sudo passwd '+username+ ' --stdin')		
+			commands.getstatusoutput('echo '+password+'| sudo passwd '+username+ ' --stdin')
+			commands.getstatusoutput('printf '+password+'\n'+password+'\n | sudo smbpasswd -a '+username)
 			#setting status in json object
 			result['status'] = 1
 		else:
