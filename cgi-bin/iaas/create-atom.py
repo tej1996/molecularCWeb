@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
-import cgi,json,commands,os,time,dbconnect
+import cgi,json,commands,os,time,sys
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+import dbconnect
 from random import randint
-import mysql.connector as mariadb
 
 
 print "Content-Type: application/json\n\n"
@@ -93,7 +94,7 @@ if osname=="ubuntu":
 				result['status'] = "Atom name already exists"
 		else:
 			result['status'] = "User does not exist!"
-	except mariadb.Error as err:
+	except dbconnect.Error as err:
 			result['status']=format(err)
 
 print json.dumps(result)
