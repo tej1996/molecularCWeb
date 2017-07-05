@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
-import cgi,json, dbconnect
+import cgi
+import dbconnect
+import json
 
 print "Content-Type: application/json\n\n"
 
@@ -13,9 +15,9 @@ try:
 	password=form_login.getvalue('lpassword').lower()
 
 	#checking for authentication from db
-	dbconnect.cursor.execute("SELECT username from users WHERE username=%s && password=%s",(username,password))
-	row=dbconnect.cursor.fetchall()		
-	num_rows=dbconnect.cursor.rowcount
+	dbconnect.cursor.execute("SELECT username from users WHERE username=%s && password=%s", (username, password))
+	row= dbconnect.cursor.fetchall()
+	num_rows= dbconnect.cursor.rowcount
 
 	#checking if user exists and storing status in json object
 	if num_rows!=0:
