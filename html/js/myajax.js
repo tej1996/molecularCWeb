@@ -76,27 +76,34 @@ $(function()
 	    event.preventDefault();
 	    var drivename=$("#drive-name").val();
 	    var drivesize=$("#drive-size").val();
+	    var username=sessionStorage.getItem("username");
 		alert(drivename);
             $.ajax({
-                url: "/cgi-bin/new_storage_fixed.py",
+                url: "/cgi-bin/staas/new_storage_fixed.py",
                 type: "post",
                 datatype:"json",
-                data: {'drivename':drivename,'drivesize':drivesize},
-		beforeSend: function(){
-			$('#btn-create-drv').attr('disabled',true);
-			$("#btn-create-drv").attr('value', 'Creating your drive...');		
-		},
-                success: function(response){
-		    if(response.status==1){
-			console.log("Login Success!");
-		    }
+                data: {'drive-name':drivename,'drive-size':drivesize,'username':username},
+				beforeSend: function(){
+					$('#btn-create-drv').attr('disabled',true);
+					$("#btn-create-drv").attr('value', 'Creating your drive...');
+				},
+				success: function(response){
+
+					if(response.status==1){
+						console.log("Drive creation success");
+						console.log(response.filename);
+					}else if(response.status==0){
+						console.log("Drive cannot be created!");
+					}else{
+						console.log(response.result);
+					}
                 },
-		complete: function() {
-        		$('#btn-create-drv').attr('disabled',false);
-			$("#btn-create-drv").attr('value', 'Create your Drive');	
-    		}
-            });
-        });
+				complete: function() {
+					$('#btn-create-drv').attr('disabled',false);
+					$("#btn-create-drv").attr('value', 'Create your Drive');
+			}
+			});
+		});
     });
 $(function()
     {
@@ -105,7 +112,7 @@ $(function()
 	    var os=$("input:radio[name=os]:checked").val();
 	    var grp=$("input:radio[name=grp]:checked").val();
  	    var atomname=$("#atomname").val();
- 	    var username=sessionStorage.getItem("username")
+ 	    var username=sessionStorage.getItem("username");
             $.ajax({
                 url: "/cgi-bin/iaas/create-atom.py",
                 type: "get",

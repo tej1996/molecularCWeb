@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
-import os,cgi,json
+import os,cgi,json,sys,commands
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+import dbconnect
 
 print "Content-Type: application/json\n\n"
 
@@ -9,64 +11,86 @@ result={}
 #taking create object fixed form data
 d_name=formdata.getvalue("drive-name")
 d_size=formdata.getvalue("drive-size")
+username=formdata.getvalue("username")
 
-	
-# client_ip will contain client's ip address  
-client_ip = 
+try:
+	# checking if drivename exists or not
+	dbconnect.cursor.execute("SELECT drivename from users_staas WHERE drivename=%s", (d_name,))
+	rows_dnames = dbconnect.cursor.fetchall()
+	num_rows_drive = dbconnect.cursor.rowcount
 
-# creating Logical Volume by the name of client's drive  
-lv_o = os.system('lvcreate  --name  '+d_name+'  --size '+d_size+'M  m_vol_grp  -y')
-if lv_o!=0:
-	result['status']='2'exists
-	break
+	# retrieving the userid of current user
+	dbconnect.cursor.execute("SELECT id from users WHERE username=%s", (username,))
+	rows_userid = dbconnect.cursor.fetchall()
+	num_rows_userid = dbconnect.cursor.rowcount
 
-# formatting client's drive with ext4  
-os.system('mkfs.ext4   /dev/m_vol_grp/'+d_name)
+	if num_rows_userid == 1:
 
-# creating mount point  
-mk_o = os.system('mkdir   /mnt/'+d_name)
-if mk_o!=0:
-	os.system('rmdir   /mnt/'+d_name)
-	os.system('mkdir   /mnt/'+d_name)
+		if num_rows_drive == 0:
 
-# mounting drive locally  
-mnt_o = os.system('mount  /dev/m_vol_grp/'+d_name+'  /mnt/'+d_name)
-if mnt_o!=0:
-	os.system('umount  /mnt/'+d_name)
-	os.system('mount  /dev/m_vol_grp/'+d_name+'  /mnt/'+d_name)
+			# creating Logical Volume by the name of client's drive
+			lv_s,lv_o = commands.getstatusoutput('sudo lvcreate  --name  ' + d_name + '  --size ' + d_size + 'M  m_vol_grp  -y')
+			if lv_s != 0:
+				result['status'] = 'Drive Name exists, please change the name!'
+			else:
 
-# Starting NFS server configuration  
-nfs_o = os.system('yum  install  nfs-utils  -y')
-if nfs_o!=0:
-	result['status']=3nfsinstall error
-	break
+				# formatting client's drive with ext4
+				commands.getstatusoutput('sudo mkfs.ext4   /dev/m_vol_grp/' + d_name)
 
-# making entry in Nfs export file 
-entry="/mnt/"+d_name+"  "+client_ip+"(rw,no_root_squash)"
+				# creating mount point
+				mk_s,mk_o = commands.getstatusoutput('sudo mkdir   /mnt/' + d_name)
+				if mk_s != 0:
+					commands.getstatusoutput('sudo rmdir   /mnt/' + d_name)
+					commands.getstatusoutput('sudo mkdir   /mnt/' + d_name)
+				commands.getstatusoutput('sudo chmod 777  /mnt/' + d_name)
+				# mounting drive locally
+				mnt_s,mnt_o = commands.getstatusoutput('sudo mount  /dev/m_vol_grp/' + d_name + '  /mnt/' + d_name)
+				if mnt_s != 0:
+					commands.getstatusoutput('sudo umount  /mnt/' + d_name)
+					commands.getstatusoutput('sudo mount  /dev/m_vol_grp/' + d_name + '  /mnt/' + d_name)
 
-# appending this entry var to /etc/exports file 
-file_exp = open('/etc/exports','a+')
-flag_exist=0
-#checking if entry already exists or not	
-for line in file_exp:	
-	if entry in line:
-		flag_exist=1
-		break
+				#install samba on server
+				in_s,in_o=commands.getstatusoutput("sudo yum install samba* -y")
+				if in_s!=0:
+					result['status']="Samba install Error @ server!"
+				else:
+					commands.getstatusoutput("sudo systemctl enable smb")
+					# making entry in samba configuration file at /etc/samba/smb.conf
+					entry = '\n['+d_name+'_'+username+']\npath = /mnt/'+d_name+'\nwritable = yes\nbrowsable = yes\nvalid users = '+username+'\npublic = no\ncreate mask = 0777\ndirectory mask = 0777\n\n'
 
-if flag_exist != 1:		
-	file_exp.write(entry)
-	file_exp.write("\n")
+					# appending this entry var to /etc/samba/smb.conf
+					file_smb = open('/etc/samba/smb.conf', 'a+')
+					file_smb.write(entry)
+					file_smb.write("\n")
+					file_smb.close()
+					status,output=commands.getstatusoutput("sudo systemctl reload smb")
 
-file_exp.close()	
-# finally  starting  nfs  service  and service  persistant 
-#os.system('systemctl   restart  nfs-server')
-os.system('systemctl   enable  nfs-server')
+					dbconnect.cursor.execute("INSERT into users_staas(uid,drivename,drivesize) VALUES(%s,%s,%s)",(rows_userid[0][0], d_name, d_size))
+					dbconnect.mariadb_connection.commit()
+					dbconnect.mariadb_connection.close()
 
-check_nfs_update = os.system('exportfs  -r')
+					sharename=d_name+'_'+username
 
-if  check_nfs_update  ==  0 :
-	result['status']=1success
+					#client_file_entry='rmdir \media\\'+sharename+'\nread -p "Enter your username: " user_name\nmount //192.168.122.152/'+sharename+' /media/'+sharename+' -o username=user_name'
+					os.system("echo 'rmdir /media/"+sharename+"\n' sudo >>/var/www/html/staas/"+sharename+".sh")
+					os.system("echo 'mkdir /media/"+sharename+"\n' sudo >>/var/www/html/staas/"+sharename+".sh")
+					os.system("echo 'read -p \"Enter your username: \" user_name\n' sudo >>/var/www/html/staas/"+sharename+".sh")
+					os.system("echo 'mount //192.168.122.152/"+sharename+"  /media/"+sharename+" -o username=$user_name\n' sudo >>/var/www/html/staas/"+sharename+".sh")
 
-else :
-	result['status']=0 error
 
+					#commands.getstatusoutput("sudo echo -e "+client_file_entry+" > /html/staas/"+sharename+".sh")
+					commands.getstatusoutput("sudo chmod 777 /var/www/html/staas/"+sharename+".sh")
+					commands.getstatusoutput("sudo tar cf /var/www/html/staas/"+sharename+".tar -C /var/www/html/staas/  "+sharename+".sh")
+					commands.getstatusoutput("sudo rm /var/www/html/staas/"+sharename+".sh")
+
+					if status == 0:
+						result['status']=1
+						result['filename']=sharename+".tar"
+					else:
+						result['status']=0
+
+
+except dbconnect.mariadb.Error as err:
+	result['status']=format(err)
+
+print json.dumps(result)
