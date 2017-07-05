@@ -94,7 +94,7 @@ if osname=="ubuntu":
 				result['status'] = "Atom name already exists"
 		else:
 			result['status'] = "User does not exist!"
-	except dbconnect.Error as err:
+	except dbconnect.mariadb.Error as err:
 			result['status']=format(err)
 
 print json.dumps(result)

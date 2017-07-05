@@ -31,11 +31,11 @@ try:
 			dbconnect.mariadb_connection.close()
 			result['status'] = 1
 		except:
-			result['status']=format(dbconnect.Error)
+			result['status']=format(dbconnect.mariadb.Error)
 	else:
 		result['status'] = 0
-except dbconnect.Error:
-		result['status']=format(dbconnect.Error)
+except dbconnect.mariadb.Error:
+		result['status']=format(dbconnect.mariadb.Error)
 
 print json.dumps(result)
 
