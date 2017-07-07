@@ -92,10 +92,49 @@ $(function()
 					if(response.status==1){
 						console.log("Drive creation success");
 						console.log(response.filename);
+						window.location.href = "staas_dashboard.html";
 					}else if(response.status==0){
 						console.log("Drive cannot be created!");
 					}else{
 						console.log(response.result);
+
+					}
+                },
+				complete: function() {
+					$('#btn-create-drv').attr('disabled',false);
+					$("#btn-create-drv").attr('value', 'Create your Drive');
+			}
+			});
+		});
+    });
+$(function()
+    {
+        $('#newbs-form').submit(function(event){
+	    event.preventDefault();
+	    var drivename=$("#drive-name").val();
+	    var drivesize=$("#drive-size").val();
+	    var username=sessionStorage.getItem("username");
+		alert(drivename);
+            $.ajax({
+                url: "/cgi-bin/staas/new_storage_bulk.py",
+                type: "post",
+                datatype:"json",
+                data: {'drive-name':drivename,'drive-size':drivesize,'username':username},
+				beforeSend: function(){
+					$('#btn-create-drv').attr('disabled',true);
+					$("#btn-create-drv").attr('value', 'Creating your drive...');
+				},
+				success: function(response){
+
+					if(response.status==1){
+						console.log("Drive creation success");
+						console.log(response.filename);
+						window.location.href = "staas_dashboard.html";
+					}else if(response.status==0){
+						console.log("Drive cannot be created!");
+					}else{
+						console.log(response.result);
+
 					}
                 },
 				complete: function() {
@@ -133,7 +172,7 @@ $(function()
 						$(".loader").css('display','none');
 						$('.check-success').css('stroke-dashoffset', 0);
 						console.log(response.status);
-							window.location.href = "iaas_dashboard.html";
+						window.location.href = "iaas_dashboard.html";
 					}
                 },
 				complete: function() {
