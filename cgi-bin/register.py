@@ -36,7 +36,7 @@ try:
 
 			os.system('sudo adduser '+username)
 			commands.getstatusoutput('echo '+password+'| sudo passwd '+username+ ' --stdin')
-			commands.getstatusoutput("(echo " + password + "; echo " + password + ") | smbpasswd -a "+username)
+			commands.getstatusoutput("(echo " + password + "; echo " + password + ") | sudo smbpasswd -a "+username)
 			commands.getstatusoutput("printf '+entry+\n' | sudo tee -a /etc/samba/smb.conf ")
 
 			#setting status in json object
