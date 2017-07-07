@@ -13,6 +13,14 @@
   <script type='text/javascript' src='js/bootstrap.min.js'></script>
   <script type='text/javascript' src='js/jquery.particleground.js'></script>
   <script type='text/javascript' src='js/particles.js'></script>
+  <script>
+	var status = sessionStorage.getItem("status");
+	if (status != 1){
+		window.location="/index.html";
+	}else{
+		var username = sessionStorage.getItem("username");
+	}
+  </script>
 </head>
 
 <body>
@@ -34,12 +42,24 @@
 			<li class="dropdown">
 			  <a href="staas.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">StaaS<span class="caret"></span></a>
 			  <ul class="dropdown-menu">
+			    <li><a href="staas_dashboard.html">Storage Dashboard</a></li>
+			    <li role="separator" class="divider"></li>
+			    <li class="dropdown-header">Object Storage</li> 
 			    <li><a href="object-newfs.html">New Fixed Storage</a></li>
 			    <li><a href="object-newbs.html">New Bulk Storage</a></li>
 			    <li><a href="object-newextes.html">Extend Existing Storage</a></li>
+			    <li role="separator" class="divider"></li>
+			    <li><a href="object-block.html">Block Storage</a></li>
 			  </ul>
 			</li>
-			<li class="active"><a href="iaas.html">IaaS</a></li>
+			<li class="dropdown active">
+			  <a href="iaas.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">IaaS<span class="caret"></span></a>
+			  <ul class="dropdown-menu">
+			    <li><a href="iaas_dashboard.html">IaaS Dashboard</a></li>
+			    <li role="separator" class="divider"></li>
+			    <li><a href="iaas.html">Create Your Atom</a></li>
+			  </ul>
+			</li>
 			<li><a href="paas.html">PaaS</a></li>
 		</ul>
       		<ul class="nav navbar-nav navbar-right"> 
@@ -86,22 +106,14 @@
 		  
 </div>
 <script>
+document.getElementById("welcome-msg").innerHTML = "Welcome, "+username;
 $(document).ready(function(){
     $('#logout').click(function(e) {
         e.preventDefault();
 	sessionStorage.clear();
 	window.location="/index.html";
     });
-
-$('.btnNext').click(function(){
-  $('.nav-pills > .active').next('li').find('a').trigger('click');
 });
-
-  $('.btnPrevious').click(function(){
-  $('.nav-pills> .active').prev('li').find('a').trigger('click');
-});
-
- });
 
 function fetchatom(){
     var tr="";
