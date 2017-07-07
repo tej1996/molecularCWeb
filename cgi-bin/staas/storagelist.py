@@ -21,7 +21,7 @@ try:
 		
 		try:
 			#retrieving all storage list created by current logged in user
-			dbconnect.cursor.execute("SELECT drivename,drivesize from users_staas WHERE uid=%s",(rows_userid[0][0],))
+			dbconnect.cursor.execute("SELECT drivename,drivesize,dtype from users_staas WHERE uid=%s",(rows_userid[0][0],))
 			rows = dbconnect.cursor.fetchall()
 			num_rows_atoms = dbconnect.cursor.rowcount
 

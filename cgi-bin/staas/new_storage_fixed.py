@@ -64,18 +64,18 @@ try:
 					file_smb.write("\n")
 					file_smb.close()
 					status,output=commands.getstatusoutput("sudo systemctl reload smb")
-
-					dbconnect.cursor.execute("INSERT into users_staas(uid,drivename,drivesize) VALUES(%s,%s,%s)",(rows_userid[0][0], d_name, d_size))
+					dtype="fixed"
+					dbconnect.cursor.execute("INSERT into users_staas(uid,drivename,drivesize,dtype) VALUES(%s,%s,%s,%s)",(rows_userid[0][0], d_name, d_size+' MB', dtype))
 					dbconnect.mariadb_connection.commit()
 					dbconnect.mariadb_connection.close()
 
 					sharename=d_name+'_'+username
 
 					#client_file_entry='rmdir \media\\'+sharename+'\nread -p "Enter your username: " user_name\nmount //192.168.122.152/'+sharename+' /media/'+sharename+' -o username=user_name'
-					os.system("echo 'rmdir /media/"+sharename+"\n' sudo >>/var/www/html/staas/"+sharename+".sh")
-					os.system("echo 'mkdir /media/"+sharename+"\n' sudo >>/var/www/html/staas/"+sharename+".sh")
-					os.system("echo 'read -p \"Enter your username: \" user_name\n' sudo >>/var/www/html/staas/"+sharename+".sh")
-					os.system("echo 'mount //192.168.122.152/"+sharename+"  /media/"+sharename+" -o username=$user_name\n' sudo >>/var/www/html/staas/"+sharename+".sh")
+					os.system("echo 'rmdir /media/"+sharename+"\n'>>/var/www/html/staas/"+sharename+".sh")
+					os.system("echo 'mkdir /media/"+sharename+"\n'>>/var/www/html/staas/"+sharename+".sh")
+					os.system("echo 'read -p \"Enter your username: \" user_name\n'>>/var/www/html/staas/"+sharename+".sh")
+					os.system("echo 'mount //192.168.122.152/"+sharename+"  /media/"+sharename+" -o username=$user_name\n'>>/var/www/html/staas/"+sharename+".sh")
 
 
 					#commands.getstatusoutput("sudo echo -e "+client_file_entry+" > /html/staas/"+sharename+".sh")
