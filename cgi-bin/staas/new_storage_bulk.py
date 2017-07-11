@@ -88,7 +88,8 @@ try:
 						result['filename']=sharename+".tar"
 					else:
 						result['status']=0
-
+		else:
+			result['status']="Drive name exists, please change the name!"
 
 except dbconnect.mariadb.Error as err:
 	result['status']=format(err)

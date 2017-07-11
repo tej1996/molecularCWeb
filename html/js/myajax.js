@@ -96,7 +96,7 @@ $(function()
 					}else if(response.status==0){
 						console.log("Drive cannot be created!");
 					}else{
-						console.log(response.result);
+						console.log(response.status);
 
 					}
                 },
@@ -133,13 +133,50 @@ $(function()
 					}else if(response.status==0){
 						console.log("Drive cannot be created!");
 					}else{
-						console.log(response.result);
+						console.log(response.status);
 
 					}
                 },
 				complete: function() {
 					$('#btn-create-drv').attr('disabled',false);
 					$("#btn-create-drv").attr('value', 'Create your Drive');
+			}
+			});
+		});
+    });
+$(function()
+    {
+        $('#newblock-form').submit(function(event){
+	    event.preventDefault();
+	    var partname=$("#part-name").val();
+	    var partsize=$("#part-size").val();
+	    var username=sessionStorage.getItem("username");
+		alert(partname);
+            $.ajax({
+                url: "/cgi-bin/staas/new_block.py",
+                type: "post",
+                datatype:"json",
+                data: {'part-name':partname,'part-size':partsize,'username':username},
+				beforeSend: function(){
+					$('#btn-create-part').attr('disabled',true);
+					$("#btn-create-part").attr('value', 'Creating your partition...');
+				},
+				success: function(response){
+
+					if(response.status==1){
+						console.log("Partition creation success");
+						console.log(response.filename);
+						window.location.href = "staas_dashboard.html";
+					}else if(response.status==0){
+						console.log("Partition cannot be created!");
+					}else{
+						console.log(response.status);
+
+					}
+                },
+				complete: function() {
+					$('#btn-create-part').attr('disabled',false);
+					$("#btn-create-part").attr('value', 'Create your Partition');
 			}
 			});
 		});
