@@ -131,7 +131,21 @@ font-weight:bold;
 }
 a:hover {text-decoration:none; color:#fff;}
 
+#atom_row a{
+    color:#0a97b9;
+}
+#atom_row a:hover{
+    color:darkblue;
+    cursor: pointer;
+}
 
+#st_row a{
+    color:#0a97b9;
+}
+#st_row a:hover{
+    color:darkblue;
+    cursor: pointer;
+}
 
 /* --------------------------------------------------
 :: Login Section Modal
@@ -305,6 +319,10 @@ body {
   width: 145px;
   height: 145px;
 }
+.paas{
+  width: 145px;
+  height: 145px;
+}
 
 
 .items label.btn-default{background-color:#fff;color:#000}
@@ -349,9 +367,22 @@ padding-top:15px;
 }
 table{
    overflow-y:scroll;
-   height:250px;
+   height:300px;
    display:block;
+    border-radius: 5px;
 }
 .table{
    width:70%;
+}
+thead{
+    background-color: #46b8da;
+}
+td,th{
+    text-align: center;
+}
+#active-atom{
+color:#336600;
+}
+#inactive-atom{
+color:#b30000;
 }
