@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import cgi,json,commands,os,time,sys
+import cgi,json,commands,os,time,sys, pyqrcode
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 import dbconnect
 from random import randint
@@ -80,11 +80,13 @@ if osname=="ubuntu":
 				if ins_status == 0:
 					# insert created atom entry into users_iaas table
 					try:
-						dbconnect.cursor.execute("INSERT into users_iaas(uid,atomname,osname,grpname,vnc_port,websockify_port,machine_ip,novnc_url) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (rows_userid[0][0],atomname,osname,grp,vnc_port,websockify_port,machine_ip,novnc_url))
+						run_status="active"
+						dbconnect.cursor.execute("INSERT into users_iaas(uid,atomname,osname,grpname,vnc_port,websockify_port,machine_ip,novnc_url,status) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)", (rows_userid[0][0],atomname,osname,grp,vnc_port,websockify_port,machine_ip,novnc_url,run_status))
 						dbconnect.mariadb_connection.commit()
 						dbconnect.mariadb_connection.close()
 						os.system('sudo websockify --web=/usr/share/novnc '+str(websockify_port)+' 192.168.122.1:'+str(vnc_port)+' -D')
-						commands.getstatusoutput("qrencode -s 16x16 -o /data/qrcodes/"+atomname+".png")
+						qrcode = pyqrcode.create(novnc_url)
+						qrcode.png("/var/www/html/iaas/qrcodes/" +username+"_"+ atomname + ".png", scale=8)
 						result['status'] = "Success"
 					except:
 						result['status'] = "Unable to store to database!"

@@ -80,16 +80,18 @@
 	<h3>Atoms
 	<a href="iaas.html"><button type="submit" class="btn btn-sky" >Create New Atom</button></a>	
 	</h3>
+	<p id="list-msg"></p>
 	<div>
 	
 <table class="table table-striped table-bordered table-hover table-responsive col-md-offset-2">
     <thead class="thead-default">
         <tr>
-            <th class="col-md-2">Image</th>
-            <th class="col-md-2">Name</th>
-            <th class="col-md-2">IP Address</th>
-            <th class="col-md-2">Port</th>
-            <th class="col-md-2">Actions</th>
+            <th class="col-md-1"><h5>Image</h5></th>
+            <th class="col-md-1"><h5>Name</h5></th>
+			<th class="col-md-1"><h5>IP Address</h5></th>
+			<th class="col-md-1"><h5>Access URL</h5></th>
+	    	<th class="col-md-1"><h5>Status</h5></th>
+            <th class="col-md-1"><h5>Actions</h5></th>
         </tr>
     </thead>
     <tbody id="atom_row">
@@ -114,33 +116,12 @@ $(document).ready(function(){
 	window.location="/index.html";
     });
 });
-
-function fetchatom(){
-    var tr="";
-    var username=sessionStorage.getItem("username");
-    $.ajax({
-        url: "/cgi-bin/iaas/atomslist.py",
-        type: "post",
-        datatype:"json",
-        data: {'username':username},
-		beforeSend: function(){
-
-		},
-		success: function(response){
-			for(var i=0;i<response.data.length;i++){
-			   tr += "<tr> <th scope=\"row\">"+response.data[i][0]+"</th>  <td>"+response.data[i][1]+"</td> <td>"+response.data[i][2]+"</td> <td><a style=\"color:blue;\" href=\""+response.data[i][3]+"\" > "+response.data[i][3]+"</a> </td> <td> <a><i class=\"fa fa-user\"></i></a> <a><i class=\"fa fa-pencil\"></i></a> <a><i class=\"fa fa-times\"></i></a> </td>  </tr>";
-			  
-			}
-			 console.log(tr);
-			document.getElementById("atom_row").innerHTML=tr;
-
-		}
-	});
-}
+</script>
+<script type='text/javascript' src='js/bootbox.min.js'></script>
+<script type="text/javascript" src="js/myajax.js"></script>
+<script>
 fetchatom();
 </script>
-
-  <script type="text/javascript" src="js/myajax.js"></script>
 </body>
 
 

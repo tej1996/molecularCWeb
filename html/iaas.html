@@ -12,7 +12,14 @@
   <script type='text/javascript' src='js/bootstrap.min.js'></script>
   <script type='text/javascript' src='js/jquery.particleground.js'></script>
   <script type='text/javascript' src='js/particles.js'></script>
-
+  <script>
+	var status = sessionStorage.getItem("status");
+	if (status != 1){
+		window.location="/index.html";
+	}else{
+		var username = sessionStorage.getItem("username");
+	}
+  </script>
 </head>
 
 <body>

@@ -21,7 +21,7 @@ try:
 		
 		try:
 			#retrieving all atoms list created by logged in user
-			dbconnect.cursor.execute("SELECT osname,atomname,machine_ip,novnc_url from users_iaas WHERE uid=%s",(rows_userid[0][0],))
+			dbconnect.cursor.execute("SELECT osname,atomname,machine_ip,novnc_url,status,aid from users_iaas WHERE uid=%s",(rows_userid[0][0],))
 			rows = dbconnect.cursor.fetchall()
 			num_rows_atoms = dbconnect.cursor.rowcount
 
