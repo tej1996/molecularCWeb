@@ -79,26 +79,21 @@
  <div id="particles">
   <div id="intro">
 	<div class="row" id="content">
-		<h3>We have four options for you, please choose accordingly!</h3>
-		<section class="section_0">
+		<h3>We have few options for you, please choose accordingly!</h3>
+		<section class="section_0 " id="paas-list">
 		      <div class="col-sm-3">
-			<div class="circle">
-			  <a href="saas.html" id="saas"><h2>SaaS</h2></a>
+			<div class="circle paas">
+			  <a onclick="getService();" href="python.html" id="python"><h3>Python</h3></a>
 			</div>
 		      </div>
 		      <div class="col-sm-3">
-			<div class="circle">
-			  <a href="staas.html" id="staas"><h2>StaaS</h2></a>
+			<div class="circle paas">
+			  <a onclick="getService();" href="ruby.html" id="ruby"><h3>Ruby</h3></a>
 			</div>
 		      </div>
 		      <div class="col-sm-3">
-			<div class="circle">
-			  <a href="iaas.html" id="iaas"><h2>IaaS</h2></a>
-			</div>
-		      </div>
-		      <div class="col-sm-3">
-			<div class="circle">
-			  <a href="paas.html" id="paas"><h2>PaaS</h2></a>
+			<div class="circle paas">
+			  <a onclick="getService();" href="perl.html" id="perl"><h3>Perl</h3></a>
 			</div>
 		      </div>
     		</section>
@@ -117,6 +112,8 @@ $(document).ready(function(){
 	sessionStorage.clear();
 	window.location="/index.html";
     });
+
  });
 </script>
+<script type="text/javascript" src="js/myajax.js"></script>
 </html>
