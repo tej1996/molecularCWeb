@@ -39,6 +39,10 @@ try:
 			commands.getstatusoutput("(echo " + password + "; echo " + password + ") | sudo smbpasswd -a "+username)
 			commands.getstatusoutput("printf '+entry+\n' | sudo tee -a /etc/samba/smb.conf ")
 
+			#creating user in docker-container for paas services
+			commands.getstatusoutput("sudo docker start 9b3a8ce5a")
+			commands.getstatusoutput("sudo docker exec -i 9b3a8ce5a adduser "+username)
+			commands.getstatusoutput("echo "+password+" | sudo docker exec -i 9b3a8ce5a passwd "+username+"  --stdin")
 			#setting status in json object
 			result['status'] = 1
 		else:
