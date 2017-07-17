@@ -1,11 +1,7 @@
 #!/usr/bin/python
 
-import cgi
-import commands
-import dbconnect
-import json
-import os
-import pwd
+import cgi,commands,dbconnect,json,os,pwd
+
 
 print "Content-Type: application/json\n\n"
 
@@ -14,7 +10,7 @@ form_register=cgi.FieldStorage()
 result={}
 try: 
 	#taking username & password from signup form
-    	email=form_register.getvalue('remail').lower().strip()
+   	email=form_register.getvalue('remail').lower().strip()
 	username=form_register.getvalue('rusername').lower().strip()
 	password=form_register.getvalue('rpassword').lower().strip()
 
@@ -31,7 +27,7 @@ try:
 		if num_rows==0:
 			#insert user entry into database
 			dbconnect.cursor.execute("INSERT into users(email,username,password) VALUES(%s,%s,%s)", (email, username, password))
-	    		dbconnect.mariadb_connection.commit()
+	   		dbconnect.mariadb_connection.commit()
 			dbconnect.mariadb_connection.close()
 
 			os.system('sudo adduser '+username)
