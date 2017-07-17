@@ -78,21 +78,28 @@
 <div id="wrapper">
  <div id="particles">
   <div id="intro">
+	  <br><br><br>
 	<div class="row" id="content">
-		<h3>Please enter the details and get your block storage!</h3>
-		<section class="section_0 col-md-4">
-		<form id="newblock-form" role="form" method="post"  autocomplete="off">
-			<div class="form-group">
-			    <label class="sr-only">Partition Name</label>
-			    <input type="text" name="part-name" id="part-name" class="form-control" placeholder="Enter partition name">
-			</div>
-			<div class="form-group">
-			    <label class="sr-only">Partition Size</label>
-			    <input type="text" name="part-size" id="part-size" class="form-control" placeholder="Enter partition size in GB : Eg. 1000,500">
-			</div>
-			<input type="submit" id="btn-create-part" class="btn btn-sky btn-lg btn-block" value="Create your Partition">
-		 </form>
-		</section>
+		<div class="col-md-5 col-md-offset-1">
+			Molecular Storage Service (Nucleus) makes it simple and practical to collect, store, and analyze data - regardless of format – all at massive scale. Nucleus is object storage built to store and retrieve any amount of data from anywhere – web sites and mobile apps, corporate applications, and data from IoT sensors or devices.
+		</div>
+		<div class="col-md-5 col-md-offset-1">
+			<h4 class="col-md-10">Please enter the details and get your block storage!</h4>
+			<section class="section_0 col-md-10">
+			<span id="bp-status"></span>
+			<form id="newblock-form" role="form" method="post"  autocomplete="off">
+				<div class="form-group">
+					<label class="sr-only">Partition Name</label>
+					<input type="text" name="part-name" id="part-name" class="form-control" placeholder="Enter partition name" required>
+				</div>
+				<div class="form-group">
+					<label class="sr-only">Partition Size</label>
+					<input type="number" name="part-size" id="part-size" class="form-control" placeholder="Enter partition size in GB : Eg. 1000,500" required>
+				</div>
+				<input type="submit" id="btn-create-part" class="btn btn-sky btn-lg btn-block" value="Create your Partition">
+			 </form>
+			</section>
+		</div>
 	</div>
   </div>
  </div>

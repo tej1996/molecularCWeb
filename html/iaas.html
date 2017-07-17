@@ -80,10 +80,10 @@
 	<div class="row" id="content">
 		<h3>Create your Atom!</h3>
 			<ul class="nav nav-pills nav-justified thumbnail">
-			  <li class="active"><a href="#tab_a" data-toggle="tab">Choose your Image</a></li>
-			  <li><a href="#tab_b" data-toggle="tab">Choose Size</a></li>
-			  <li><a href="#tab_c" data-toggle="tab">Set Atom Name</a></li>
-			  <li><a href="#tab_d" data-toggle="tab" id="tab_d_head" style="display:none">Generating Atom</a></li>
+			  <li class="active" id="tab1li"><a href="#tab_a" data-toggle="tab">Choose your Image</a></li>
+			  <li id="tab2li"><a href="#tab_b" data-toggle="tab">Choose Size</a></li>
+			  <li id="tab3li"><a href="#tab_c" data-toggle="tab">Set Atom Name</a></li>
+			  <li id="tab4li"><a href="#tab_d" data-toggle="tab" id="tab_d_head" style="display:none">Generating Atom</a></li>
 			</ul>
 			<form id="create-atom-form">
 			<div class="tab-content">
@@ -92,7 +92,7 @@
 				    <div class="items">
 					<div class="info-block block-info clearfix">
 					   <div data-toggle="buttons" class="btn-group col-md-offset-1">
-						  <label class="btn btn-default col-md-2">
+						    <label class="btn btn-default col-md-2">
 						        <div class="bizcontent">
 						            <input type="radio" name="os" autocomplete="off" value="ubuntu">
 							    <img src="images/os/ubuntu.svg" class="logo"></img>
@@ -206,11 +206,12 @@
 				<div class="tab-pane" id="tab_c">
 				    <h4>Give name to your Atom</h4>
 				    <label>Atom Name</label>
-				    <input type="text" id="atomname" placeholder="Enter your Atom name">
+				    <input type="text" id="atomname" placeholder="Enter your Atom name" required>
 				    <a class="btn btn-primary btnPrevious" >Previous</a>
 				    <a class="btn btn-primary btnNext" >Next</a>
-				    <button type="submit" class="btn btn-primary btnNext" id="submit-atom">Submit</button>
-				
+				    <button type="submit" class="btn btn-primary" id="submit-atom">Submit</button>
+					<br><br>
+					<span id="i-status"></span>
 				</div>
 				<div class="tab-pane" id="tab_d" >
 				    <h4>Generating your atom</h4>

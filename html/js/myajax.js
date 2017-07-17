@@ -13,23 +13,21 @@ $(function()
 			$('#btn-login').attr('disabled',true);
 			$("#btn-login").attr('value', 'Logging in...');		
 		},
-                success: function(response){
+        success: function(response){
 		    if(response.status==1){
-			console.log("Login Success!");
-			sessionStorage.setItem("status",1);
-			sessionStorage.setItem("username", response.username);
-			window.location="/dashboard.html";
+				console.log("Login Success!");
+				sessionStorage.setItem("status",1);
+				sessionStorage.setItem("username", response.username);
+				window.location="/dashboard.html";
 		    }else if(response.status==0){
-			$("#lstatus").text('Invalid username or password,please try again!');
-			console.log("Invalid username or password");
+				$("#lstatus").text('Invalid username or password,please try again!');
 		    }else{
-			$("#lstatus").text('Unable to take your request! Sorry!');
-			console.log("Unable to take your request!Sorry!");
+				$("#lstatus").text('Unable to take your request! Sorry!');
 		    }
                 },
 		complete: function() {
         		$('#btn-login').attr('disabled',false);
-			$("#btn-login").attr('value', 'Log In');	
+				$("#btn-login").attr('value', 'Log In');
     		}
             });
         });
@@ -53,19 +51,19 @@ $(function()
 		},
                 success: function(response){
 		    if(response.status==1){
-			console.log("Register Success!");
-			$("#r-status").text('You are now registered! Please login..');
+				console.log("Register Success!");
+				$("#r-status").text('You are now registered! Please login..');
 		    }else if(response.status==0){
-			console.log("Username or email exists");
-			$("#r-status").text('Username or Email exists,please try again!');
+				console.log("Username or email exists");
+				$("#r-status").text('Username or Email exists,please try again!');
 		    }else{
-		    	console.log("Unable to take your request!Sorry!");
-			$("#r-status").text('Unable to take your request! Sorry!');
+		    	console.log("Unable to take your request! Sorry!");
+				$("#r-status").text('Unable to take your request! Sorry!');
 		    }
                 },
 		complete: function() {
         		$('#btn-register').attr('disabled',false);
-			$("#btn-register").attr('value', 'Create your Account');	
+				$("#btn-register").attr('value', 'Create your Account');
     		}
             });
         });
@@ -77,7 +75,6 @@ $(function()
 	    var drivename=$("#drive-name").val();
 	    var drivesize=$("#drive-size").val();
 	    var username=sessionStorage.getItem("username");
-		alert(drivename);
             $.ajax({
                 url: "/cgi-bin/staas/new_storage_fixed.py",
                 type: "post",
@@ -90,14 +87,15 @@ $(function()
 				success: function(response){
 
 					if(response.status==1){
-						console.log("Drive creation success");
+						$("#d-status").text("Your drive is created , redirecting to dashboard..!");
 						console.log(response.filename);
 						window.location.href = "staas_dashboard.html";
 					}else if(response.status==0){
-						console.log("Drive cannot be created!");
-					}else{
+						$("#d-status").text("Sorry, drive cannot be created, please try again!");
+					}else if(response.status==2) {
+                        $("#d-status").text("Drive name exists, please change the name!");
+                    }else{
 						console.log(response.status);
-
 					}
                 },
 				complete: function() {
@@ -127,14 +125,15 @@ $(function()
 				success: function(response){
 
 					if(response.status==1){
-						console.log("Drive creation success");
+						$("#d-status").text("Your drive is created , redirecting to dashboard..!");
 						console.log(response.filename);
 						window.location.href = "staas_dashboard.html";
 					}else if(response.status==0){
-						console.log("Drive cannot be created!");
-					}else{
+						$("#d-status").text("Sorry, drive cannot be created, please try again!");
+					}else if(response.status==2) {
+                        $("#d-status").text("Drive name exists, please change the name!");
+                    }else{
 						console.log(response.status);
-
 					}
                 },
 				complete: function() {
@@ -164,14 +163,15 @@ $(function()
 				success: function(response){
 
 					if(response.status==1){
-						console.log("Partition creation success");
+						$("#bp-status").text("Your partition is created , redirecting to dashboard..!");
 						console.log(response.filename);
 						window.location.href = "staas_dashboard.html";
 					}else if(response.status==0){
-						console.log("Partition cannot be created!");
-					}else{
+						$("#bp-status").text("Sorry, Partition cannot be created, please try again!");
+					}else if(response.status==2) {
+                        $("#bp-status").text("Partition name exists, please change the name!");
+                    }else{
 						console.log(response.status);
-
 					}
                 },
 				complete: function() {
@@ -185,10 +185,19 @@ $(function()
     {
         $('#create-atom-form').submit(function(event){
 	    event.preventDefault();
-	    var os=$("input:radio[name=os]:checked").val();
-	    var grp=$("input:radio[name=grp]:checked").val();
- 	    var atomname=$("#atomname").val();
- 	    var username=sessionStorage.getItem("username");
+
+		if (!$("input:radio[name=os]:checked").val()) {
+			$("#tab_d_head").css('display','none');
+		    alert("Please select the image you want to install!");
+		}
+		else if(!$("input:radio[name=grp]:checked").val()){
+			$("#tab_d_head").css('display','none');
+			alert('Please select the group for configuration of your atom!');
+		}else{
+			var os=$("input:radio[name=os]:checked").val();
+			var grp=$("input:radio[name=grp]:checked").val();
+			var atomname=$("#atomname").val();
+			var username=sessionStorage.getItem("username");
             $.ajax({
                 url: "/cgi-bin/iaas/create-atom.py",
                 type: "get",
@@ -198,28 +207,51 @@ $(function()
 					$('#submit-atom').attr('disabled',true);
 					$("#submit-atom").attr('value', 'Creating...');
 					$("#tab_d_head").css('display','block');
+					$("#tab_a,#tab_b,#tab_c").removeClass("active");
+					$("#tab1li,#tab2li,#tab3li").removeClass("active");
+					$("#tab_d").addClass("active");
+					$("#tab4li").addClass("active");
+
 				},
 				success: function(response){
-					if(response.status==0){
-					console.log("Error");
-					}
-					else if(response.status==2){
-					alert("Server Error");
-					}else{
+					if(response.status==1){
 						$(".loader").css('display','none');
 						$('.check-success').css('stroke-dashoffset', 0);
 						console.log(response.status);
 						setTimeout(function(){
 							window.location.href = "iaas_dashboard.html";
-						}, 12000);
+						},10000);
+					}else if(response.status==2){
+						$("#tab_d_head").css('display','none');
+						$("#tab_d").removeClass("active");
+						$("#tab4li").removeClass("active");
+						$("#tab_c").addClass("active");
+						$("#tab3li").addClass("active");
+						$("#i-status").text("Sorry, unable to create your atom!");
+					}
+					else if(response.status==3){
+						$("#tab_d_head").css('display','none');
+						$("#tab_d").removeClass("active");
+						$("#tab4li").removeClass("active");
+						$("#tab_c").addClass("active");
+						$("#tab3li").addClass("active");
+						$("#i-status").text("Atom name already exist!");
+					}else{
+						$("#tab_d_head").css('display','none');
+						$("#tab_d").removeClass("active");
+						$("#tab4li").removeClass("active");
+						$("#tab_c").addClass("active");
+						$("#tab3li").addClass("active");
+						console.log(response.result);
 					}
                 },
 				complete: function() {
 						$('#submit-atom').attr('disabled',false);
 						$("#submit-atom").attr('value', 'Submit');
 					}
-					});
-				});
+			});
+		}
+		});
     });
 
 function fetchatom(){
@@ -262,8 +294,8 @@ function fetchatom(){
 					dtitle="Reboot atom? It may take few minutes to reboot!";
 					dmessage="Are you sure you want to reboot your selected atom?";
 				}else if(name=="power"){
-					dtitle="Poweroff/on atom?";
-					dmessage="Are you sure you want to shutdown/poweron your selected atom?";
+					dtitle="PowerOff/On atom?";
+					dmessage="Are you sure you want to PowerOff/On your selected atom?";
 				}
                 bootbox.confirm({
 					title: dtitle,
@@ -433,7 +465,6 @@ $(function() {
 //<!--paas-->
  $("#paas-list a").on('click', function(event) {
          event.preventDefault();
- 		 alert(this.id);
 		 $.ajax({
 			url: "/cgi-bin/paas/reqservice.py",
 			type: "post",
