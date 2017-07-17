@@ -44,11 +44,10 @@ try:
 					commands.getstatusoutput('sudo mkdir   /mnt/' + d_name)
 				commands.getstatusoutput('sudo chmod 777  /mnt/' + d_name)
 				# mounting drive locally
-				mnt_s,mnt_o = commands.getstatusoutput('sudo mount  /dev/m_vol_grp/' + d_name + '  /mnt/' + d_name)
+				mnt_s,mnt_o=commands.getstatusoutput('sudo mount  /dev/m_vol_grp/' + d_name + '  /mnt/' + d_name)
 				if mnt_s != 0:
 					commands.getstatusoutput('sudo umount  /mnt/' + d_name)
 					commands.getstatusoutput('sudo mount  /dev/m_vol_grp/' + d_name + '  /mnt/' + d_name)
-
 				#install samba on server
 				in_s,in_o=commands.getstatusoutput("sudo yum install samba* -y")
 				if in_s!=0:
@@ -89,7 +88,7 @@ try:
 					else:
 						result['status']=0
 		else:
-			result['status']="Drive name exists, please change the name!"
+			result['status']=2
 
 except dbconnect.mariadb.Error as err:
 	result['status']=format(err)

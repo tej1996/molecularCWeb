@@ -79,7 +79,7 @@ try:
 					else:
 						result['status']=0
 		else:
-			result['status']="Partition name exists, please change the name!"
+			result['status']=2
 
 
 except dbconnect.mariadb.Error as err:
